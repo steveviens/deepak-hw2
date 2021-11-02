@@ -20,8 +20,8 @@ class STS:
         return self.sts_client.get_caller_identity()
 
 
+"""
 # TEST DRIVER
-
 sts = STS()
 aws_identity = sts.get_aws_identity()
 
@@ -30,3 +30,4 @@ payload = {
 }
 
 util.prettyprint(payload)
+"""
