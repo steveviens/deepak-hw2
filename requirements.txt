@@ -1,0 +1,5 @@
+boto3~=1.16.9
+requests~=2.24.0
+awscli
+botocore~=1.19.9
+python-dateutil~=2.8.1
