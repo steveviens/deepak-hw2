@@ -21,13 +21,13 @@ class STS:
 
 
 """
-# TEST DRIVER
+# Example
 sts = STS()
 aws_identity = sts.get_aws_identity()
 
-payload = {
+results = {
     'aws_account': aws_identity
 }
 
-util.prettyprint(payload)
+util.prettyprint(results)
 """
