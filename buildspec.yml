@@ -14,12 +14,13 @@ phases:
     build:
         commands:
             - echo Starting the build phase on `date`
-            - zip -r assignment2.zip src/s3.py src/sts.py src/util.py
-
+            - zip -r lambda_function_1.zip src/lambda_function_1.py src/s3.py src/sts.py src/util.py
+            - zip -r lambda_function_2.zip src/lambda_function_2.py src/s3.py src/sts.py src/util.py
     post_build:
         commands:
             - echo Build completed on `date`
 artifacts:
     files:
-        - assignment2.zip
+        - lambda_function_1.zip
+        - lambda_function_2.zip
     name: assignment2-build
