@@ -54,10 +54,19 @@ abc
 abc
 ### Resources to create
 
-1. VPC
-2. S3 Buckets (B1 and B2)
-3. Open Search
-4. Lambda Functions (LF1, LF2, )
-5. Security Group (SG1)
-6. CodePipelines (P1, P2)
-7. 
+1. Default VPC
+2. Default Subnets (a, b, c)
+3. Default Security Group
+4. S3 Bucket 1 (S3-1) - Photos
+5. S3 Bucket 2 (S3-2)
+6. Open Search Domain (OS-1)
+7. Lambda Function 1 (LF-1)
+8. Lambda Function 2 (LF-2)
+9. CodePipeline 1 (PL-1)
+10. CodePipeline 2 (PL-2)
+
+Upload Photo Sequence of Events
+1. Upload Photo to S3-1
+   1. Trigger LF-1 passing S3 key to photo in S3-1 + additional user supplied labels passed as metadata
+   2. LF-1 submits photo to AWS Rekognition returning labels
+   3. LF-1 adds user supplied labels + rekognition labels + photo S3 key to open search index
