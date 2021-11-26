@@ -1,6 +1,29 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Creates lambda functions used for Homework #2"
 Resources:
+
+  HW2PhotosBucket:
+    # Source:
+    Type: AWS::S3::Bucket
+    DependsOn: HW2LambdaFunction1Permission
+    Properties:
+      BucketName: hw2-4321-photos
+      Tags:
+        - Key: project
+          Value: hw2
+        - Key: student
+          Value: dd2676
+
+  HW2LambdaFunction1Permission:
+    # Source: https://www.itonaut.com/2018/10/03/implement-s3-bucket-lambda-triggers-in-aws-cloudformation/
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref HW2LambdaFunction1
+      Principal: s3.amazonaws.com
+      SourceArn: !Sub 'arn:aws:s3:::hw2-4321-photos'
+      SourceAccount: !Ref AWS::AccountId
+
   HW2LambdaFunctionExecutionRole:
     # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-tags
     Type: AWS::IAM::Role
@@ -25,6 +48,7 @@ Resources:
             Action:
             - logs:*
             Resource: arn:aws:logs:*:*:*
+
   HW2LambdaFunction1:
     # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
     Type: AWS::Lambda::Function
@@ -44,6 +68,7 @@ Resources:
           Value: hw2
         - Key: student
           Value: dd2676
+
   HW2LambdaFunction2:
     # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
     Type: AWS::Lambda::Function
@@ -63,8 +88,12 @@ Resources:
           Value: hw2
         - Key: student
           Value: dd2676
+
 Outputs:
-  HW2LambdaFunctionExecutionRoleARN:
+  HW2PhotosBucketARN:
     Description: 'The ARN for the hw2-4321-photos bucket'
+    Value: !GetAtt HW2PhotosBucket.Arn
+  HW2LambdaFunctionExecutionRoleARN:
+    Description: 'The ARN for the lambda function execution role'
     Value: !GetAtt HW2LambdaFunctionExecutionRole.Arn
 
