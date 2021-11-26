@@ -3,11 +3,20 @@ Description: "Creates lambda functions used for Homework #2"
 Resources:
 
   HW2PhotosBucket:
-    # Source:
+    # Source: https://www.itonaut.com/2018/10/03/implement-s3-bucket-lambda-triggers-in-aws-cloudformation/
     Type: AWS::S3::Bucket
     DependsOn: HW2LambdaFunction1Permission
     Properties:
       BucketName: hw2-4321-photos
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Function: !GetAtt HW2LambdaFunction1.Arn
+            Filter:
+              S3Key:
+                Rules:
+                - Name: suffix
+                  Value: .jpeg
       Tags:
         - Key: project
           Value: hw2
