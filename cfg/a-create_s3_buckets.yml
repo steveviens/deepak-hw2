@@ -4,7 +4,7 @@ Resources:
   HW2RepoBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: hw2-4321-repo2
+      BucketName: hw2-4321-repo
       Tags:
         - Key: project
           Value: hw2
@@ -13,7 +13,7 @@ Resources:
   HW2PhotosBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: hw2-4321-photos2
+      BucketName: hw2-4321-photos
       Tags:
         - Key: project
           Value: hw2
