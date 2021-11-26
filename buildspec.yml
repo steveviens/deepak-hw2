@@ -14,11 +14,15 @@ phases:
     build:
         commands:
             - echo Starting the build phase on `date`
-            - zip -r assignment2.zip src/*.py
+            - zip -r hw2_dd2676_lambda_functions.zip src/*.py
+            - zip -r hw2_dd2676_lambda_function1.zip src/lambda_function_1.py s3.py util.py
+            - zip -r hw2_dd2676_lambda_function2.zip src/lambda_function_2.py s3.py util.py
     post_build:
         commands:
             - echo Build completed on `date`
 artifacts:
     files:
-        - assignment2.zip
-    name: assignment2-build
+        - hw2_dd2676_lambda_functions.zip
+        - hw2_dd2676_lambda_function1.zip
+        - hw2_dd2676_lambda_function2.zip
+    name: hw2-dd2676_lambda-build
