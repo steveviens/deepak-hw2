@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Creates lambda functions used for Homework #2"
+Resources:
+  HW2LambdaFunctionExecutionRole:
+    # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-tags
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Describe this IAM role here
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:*
+            Resource: arn:aws:logs:*:*:*
+  HW2LambdaFunction1:
+    # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Describe your lambda function here
+      FunctionName: lambda_function_1b
+      Runtime: python3.8
+      Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
+      Code:
+        S3Bucket: hw2-4321-repo
+        S3Key: hw2_lambda_functions.zip
+      Handler: lambda_function_1.lambda_handler
+      MemorySize: 256
+      Timeout: 10
+      Tags:
+        - Key: project
+          Value: hw2
+        - Key: student
+          Value: dd2676
+  HW2LambdaFunction2:
+    # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Describe your lambda function here
+      FunctionName: lambda_function_2b
+      Runtime: python3.8
+      Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
+      Code:
+        S3Bucket: hw2-4321-repo
+        S3Key: hw2_lambda_functions.zip
+      Handler: lambda_function_2.lambda_handler
+      MemorySize: 256
+      Timeout: 10
+      Tags:
+        - Key: project
+          Value: hw2
+        - Key: student
+          Value: dd2676
+Outputs:
+  HW2LambdaFunctionExecutionRoleARN:
+    Description: 'The ARN for the hw2-4321-photos bucket'
+    Value: !GetAtt HW2LambdaFunctionExecutionRole.Arn
+
