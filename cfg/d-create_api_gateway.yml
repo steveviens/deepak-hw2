@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'Creates API Gateway for Homework #2'
+Resources:
+  # Source: https://nickolaskraus.org/articles/creating-an-amazon-api-gateway-with-a-lambda-integration-using-cloudformation/
+
+  HW2RestAPI:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Description: An api gateway with S3 service and lambda integrations
+      ApiKeySourceType: HEADER
+      EndpointConfiguration:
+        Types:
+          - EDGE
+      Name: lambda-api
+      Tags:
+        - Key: project
+          Value: hw2
+        - Key: student
+          Value: dd2676
+
+    HW2RestAPIResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        ParentId: !GetAtt HW2RestAPI.RootResourceId
+        PathPart: 'search'
+        RestApiId: !Ref HW2RestAPI
+        Tags:
+          - Key: project
+            Value: hw2
+          - Key: student
+            Value: dd2676
+
+    HW2RestAPIMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        ApiKeyRequired: false
+        AuthorizationType: NONE
+        HttpMethod: POST
+        Integration:
+          ConnectionType: INTERNET
+          Credentials: !GetAtt ApiGatewayIamRole.Arn
+          IntegrationHttpMethod: POST
+          PassthroughBehavior: WHEN_NO_MATCH
+          TimeoutInMillis: 29000
+          Type: AWS_PROXY
+          Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations'
+        OperationName: 'lambda'
+        ResourceId: !Ref HW2RestAPIResource
+        RestApiId: !Ref HW2RestAPI
+        Tags:
+          - Key: project
+            Value: hw2
+          - Key: student
+            Value: dd2676
+
+    HW2RestAPIModel:
+      Type: AWS::ApiGateway::Model
+      Properties:
+        ContentType: 'application/json'
+        RestApiId: !Ref HW2RestAPI
+        Schema: {}
+
+    HW2RestAPIStage:
+      Type: AWS::ApiGateway::Stage
+      Properties:
+        DeploymentId: !Ref HW2RestAPIDeployment
+        Description: Lambda API Stage v0
+        RestApiId: !Ref HW2RestAPI
+        StageName: 'v0'
+
+    HW2RestAPIDeployment:
+      Type: AWS::ApiGateway::Deployment
+      DependsOn: HW2RestAPIMethod
+      Properties:
+        Description: Lambda API Deployment
+        RestApiId: !Ref HW2RestAPI
+

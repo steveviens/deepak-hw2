@@ -44,10 +44,10 @@ Resources:
         - Effect: Allow
           Principal:
             Service:
-            - lambda.amazonaws.com
+              - lambda.amazonaws.com
           Action:
-          - sts:AssumeRole
-      Path: "/"
+            - sts:AssumeRole
+      Path: '/'
       Policies:
       - PolicyName: root
         PolicyDocument:
@@ -89,7 +89,27 @@ Resources:
       Code:
         S3Bucket: hw2-4321-repo
         S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda2.zip
-      Handler: hw2_lambda1.lambda_handler
+      Handler: hw2_lambda2.lambda_handler
+      MemorySize: 256
+      Timeout: 10
+      Tags:
+        - Key: project
+          Value: hw2
+        - Key: student
+          Value: dd2676
+
+  HW2LambdaFunction3:
+    # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Describe your lambda function here
+      FunctionName: hw2_lambda_function3
+      Runtime: python3.8
+      Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
+      Code:
+        S3Bucket: hw2-4321-repo
+        S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda3.zip
+      Handler: hw2_lambda3.lambda_handler
       MemorySize: 256
       Timeout: 10
       Tags:
