@@ -35,7 +35,7 @@ Resources:
       Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-4321-repo
-        S3Key: hw2_lambda_functions.zip
+        S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda_function1.zip
       Handler: lambda_function_1.lambda_handler
       MemorySize: 256
       Timeout: 10
@@ -54,7 +54,7 @@ Resources:
       Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-4321-repo
-        S3Key: hw2_lambda_functions.zip
+        S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda_function2.zip
       Handler: lambda_function_2.lambda_handler
       MemorySize: 256
       Timeout: 10
