@@ -1,7 +1,7 @@
 import json
 import logging
 import sys
-import lambda_function_1
+import hw2_lambda1
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

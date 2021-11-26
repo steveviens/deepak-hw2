@@ -30,13 +30,13 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Description: Describe your lambda function here
-      FunctionName: lambda_function_1b
+      FunctionName: hw2_lambda_function1
       Runtime: python3.8
       Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-4321-repo
-        S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda_function1.zip
-      Handler: lambda_function_1.lambda_handler
+        S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda1.zip
+      Handler: hw2_lambda1.lambda_handler
       MemorySize: 256
       Timeout: 10
       Tags:
@@ -49,13 +49,13 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       Description: Describe your lambda function here
-      FunctionName: lambda_function_2b
+      FunctionName: hw2_lambda_function2
       Runtime: python3.8
       Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-4321-repo
-        S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda_function2.zip
-      Handler: lambda_function_2.lambda_handler
+        S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda2.zip
+      Handler: hw2_lambda1.lambda_handler
       MemorySize: 256
       Timeout: 10
       Tags:
