@@ -28,6 +28,7 @@ Resources:
   HW2RestAPISearchMethodGET:
     Type: AWS::ApiGateway::Method
     Properties:
+      OperationName: 'OpenSearch'
       ApiKeyRequired: false
       AuthorizationType: NONE
       HttpMethod: GET
@@ -40,7 +41,6 @@ Resources:
         Type: AWS_PROXY
         #Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations'
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:677126791323:function:hw2_lambda_function3/invocations'
-      OperationName: 'lambda'
       ResourceId: !Ref HW2RestAPISearchResource
       RestApiId: !Ref HW2RestAPI
 
@@ -54,22 +54,20 @@ Resources:
   HW2RestAPIUploadMethodPOST:
     Type: AWS::ApiGateway::Method
     Properties:
+      OperationName: 'UploadPicture'
       ApiKeyRequired: false
       AuthorizationType: NONE
       HttpMethod: POST
       Integration:
         ConnectionType: INTERNET
         Credentials: !GetAtt HW2RestAPIIamRole.Arn
-        IntegrationHttpMethod: POST
+        IntegrationHttpMethod: PUT
         PassthroughBehavior: WHEN_NO_MATCH
         TimeoutInMillis: 29000
-        Type: AWS_PROXY
-        #Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations'
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:677126791323:function:hw2_lambda_function2/invocations'
-      OperationName: 'lambda'
+        Type: AWS
+        Uri: !Sub 'arn:aws:apigateway:us-east-1:s3:path/hw2-4321-photos/{object}'
       ResourceId: !Ref HW2RestAPIUploadResource
       RestApiId: !Ref HW2RestAPI
-
 
   HW2RestAPIModel:
     Type: AWS::ApiGateway::Model
