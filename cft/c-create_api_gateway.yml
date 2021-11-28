@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: 'Creates API Gateway for Homework #2'
 Resources:
-  # Source: https://nickolaskraus.org/articles/creating-an-amazon-api-gateway-with-a-lambda-integration-using-cloudformation/
 
   HW2RestAPI:
     Type: AWS::ApiGateway::RestApi
@@ -42,7 +41,7 @@ Resources:
         #Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations'
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:677126791323:function:hw2_lambda_function3/invocations'
       ResourceId: !Ref HW2RestAPISearchResource
-      RestApiId: !Ref HW2RestAPI∂ƒ
+      RestApiId: !Ref HW2RestAPI
 
   HW2RestAPIUploadResource:
     Type: AWS::ApiGateway::Resource

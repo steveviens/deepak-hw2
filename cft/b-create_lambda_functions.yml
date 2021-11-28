@@ -7,7 +7,7 @@ Resources:
     Type: AWS::S3::Bucket
     DependsOn: HW2LambdaFunction1Permission
     Properties:
-      BucketName: hw2-4321-photos
+      BucketName: hw2-dd2676-photos
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: s3:ObjectCreated:*
@@ -30,7 +30,7 @@ Resources:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref HW2LambdaFunction1
       Principal: s3.amazonaws.com
-      SourceArn: !Sub 'arn:aws:s3:::hw2-4321-photos'
+      SourceArn: !Sub 'arn:aws:s3:::hw2-dd2676-photos'
       SourceAccount: !Ref AWS::AccountId
 
   HW2LambdaFunctionExecutionRole:
@@ -66,7 +66,7 @@ Resources:
       Runtime: python3.8
       Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
-        S3Bucket: hw2-4321-repo
+        S3Bucket: hw2-dd2676-repo
         S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda1.zip
       Handler: hw2_lambda1.lambda_handler
       MemorySize: 256
@@ -86,7 +86,7 @@ Resources:
       Runtime: python3.8
       Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
-        S3Bucket: hw2-4321-repo
+        S3Bucket: hw2-dd2676-repo
         S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda2.zip
       Handler: hw2_lambda2.lambda_handler
       MemorySize: 256
@@ -106,7 +106,7 @@ Resources:
       Runtime: python3.8
       Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
-        S3Bucket: hw2-4321-repo
+        S3Bucket: hw2-dd2676-repo
         S3Key: hw2-dd2676_lambda-build/hw2_dd2676_lambda3.zip
       Handler: hw2_lambda3.lambda_handler
       MemorySize: 256
@@ -119,7 +119,7 @@ Resources:
 
 Outputs:
   HW2PhotosBucketARN:
-    Description: 'The ARN for the hw2-4321-photos bucket'
+    Description: 'The ARN for the hw2-dd2676-photos bucket'
     Value: !GetAtt HW2PhotosBucket.Arn
   HW2LambdaFunctionExecutionRoleARN:
     Description: 'The ARN for the lambda function execution role'

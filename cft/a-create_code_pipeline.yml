@@ -1,16 +1,18 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: 'Creates S3 repo bucket used for Homework #2'
+Description: 'Creates Homework #2 Code Pipeline'
 Resources:
+
   HW2RepoBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: hw2-4321-repo
+      BucketName: hw2-dd2676-repo
       Tags:
         - Key: project
           Value: hw2
         - Key: student
           Value: dd2676
+
 Outputs:
   HW2RepoBucketARN:
-    Description: 'The ARN for the hw2-4321-repo bucket'
+    Description: 'Output the ARN for the new hw2-dd2676-repo bucket'
     Value: !GetAtt HW2RepoBucket.Arn
