@@ -13,17 +13,17 @@ phases:
     build:
         commands:
             - echo Starting the build phase on `date`
-            - zip -r hw2_dd2676_lambdas.zip src/*.py
-            - zip -r hw2_dd2676_lambda1.zip src/hw2_lambda1.py src/s3.py src/util.py
-            - zip -r hw2_dd2676_lambda2.zip src/hw2_lambda2.py
-            - zip -r hw2_dd2676_lambda3.zip src/hw2_lambda3.py
+            - zip -r hw2_1323_lambdas.zip src/*.py
+            - zip -r hw2_1323_lambda1.zip src/hw2_lambda1.py src/s3.py src/util.py
+            - zip -r hw2_1323_lambda2.zip src/hw2_lambda2.py
+            - zip -r hw2_1323_lambda3.zip src/hw2_lambda3.py
     post_build:
         commands:
             - echo Build completed on `date`
 artifacts:
     files:
-        - hw2_dd2676_lambdas.zip    # Python code for all lambdas in one zip file
-        - hw2_dd2676_lambda1.zip    # Only python code for lambda 1
-        - hw2_dd2676_lambda2.zip    # Only python code for lambda 2
-        - hw2_dd2676_lambda3.zip    # Only python code for lambda 3
-    name: hw2-dd2676_lambda-build
+        - hw2_1323_lambdas.zip    # Python code for all lambdas in one zip file
+        - hw2_1323_lambda1.zip    # Only python code for lambda 1
+        - hw2_1323_lambda2.zip    # Only python code for lambda 2
+        - hw2_1323_lambda3.zip    # Only python code for lambda 3
+    name: hw2-1323_lambda-build
