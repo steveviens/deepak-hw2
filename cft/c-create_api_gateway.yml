@@ -5,9 +5,11 @@ Resources:
   HW2RestAPI:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Description: An api gateway with S3 service and lambda integrations
-      Name: hw2-api-gateway
+      Description: An api gateway with S3 service integrations
+      Name: hw2-dd2676-api-gateway
       ApiKeySourceType: HEADER
+      BinaryMediaTypes:
+        - '*/*'
       EndpointConfiguration:
         Types:
         - REGIONAL
@@ -17,83 +19,73 @@ Resources:
         - Key: student
           Value: dd2676
 
-  HW2RestAPISearchResource:
+  HW2RestAPIFolderResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt HW2RestAPI.RootResourceId
-      PathPart: 'search'
+      PathPart: '{folder}'
       RestApiId: !Ref HW2RestAPI
 
-  HW2RestAPISearchMethodGET:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      OperationName: 'OpenSearch'
-      ApiKeyRequired: false
-      AuthorizationType: NONE
-      HttpMethod: GET
-      Integration:
-        ConnectionType: INTERNET
-        Credentials: !GetAtt HW2RestAPIIamRole.Arn
-        IntegrationHttpMethod: GET
-        PassthroughBehavior: WHEN_NO_MATCH
-        TimeoutInMillis: 29000
-        Type: AWS_PROXY
-        #Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations'
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:677126791323:function:hw2_lambda_function3/invocations'
-      ResourceId: !Ref HW2RestAPISearchResource
-      RestApiId: !Ref HW2RestAPI
-
-  HW2RestAPIUploadResource:
+  HW2RestAPIObjectResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt HW2RestAPI.RootResourceId
-      PathPart: 'upload'
+      ParentId: !Ref HW2RestAPIFolderResource
+      PathPart: '{object}'
       RestApiId: !Ref HW2RestAPI
 
-  HW2RestAPIUploadMethodPOST:
+  HW2RestAPIPUTMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      OperationName: 'UploadPhoto'
       ApiKeyRequired: false
       AuthorizationType: NONE
-      HttpMethod: POST
+      HttpMethod: PUT
+      RequestParameters:
+        method.request.path.folder: true
+        method.request.path.object: true
       Integration:
-        ConnectionType: INTERNET
-        Credentials: !GetAtt HW2RestAPIIamRole.Arn
         IntegrationHttpMethod: PUT
+        Type: AWS
+        RequestParameters:
+          integration.request.path.bucket: method.request.path.folder
+          integration.request.path.key: method.request.path.object
+        Uri: !Sub 'arn:aws:apigateway:us-east-1:s3:path/{bucket}/{key}'
+        ConnectionType: INTERNET
+        Credentials: !GetAtt HW2RestAPIIamRole.Arn
         PassthroughBehavior: WHEN_NO_MATCH
         TimeoutInMillis: 29000
-        Type: AWS
-        Uri: !Sub 'arn:aws:apigateway:us-east-1:s3:path/{bucket}/{object}'
-      ResourceId: !Ref HW2RestAPIUploadResource
+      ResourceId: !Ref HW2RestAPIObjectResource
       RestApiId: !Ref HW2RestAPI
-
-  HW2RestAPIModel:
-    Type: AWS::ApiGateway::Model
-    Properties:
-      ContentType: 'application/json'
-      RestApiId: !Ref HW2RestAPI
-      Schema: {}
 
   HW2RestAPIStage:
     Type: AWS::ApiGateway::Stage
     Properties:
+      StageName: v1
+      Description: HW2 API Stage v0
       DeploymentId: !Ref HW2RestAPIDeployment
-      Description: Lambda API Stage v0
       RestApiId: !Ref HW2RestAPI
-      StageName: 'v0'
+      MethodSettings:
+        - ResourcePath: '/*'
+          HttpMethod: '*'
+          LoggingLevel: INFO   # VALID VALUES ARE OFF, ERROR and INFO
+          DataTraceEnabled: true
+          MetricsEnabled: false
+      Tags:
+        - Key: project
+          Value: hw2
+        - Key: student
+          Value: dd2676
 
   HW2RestAPIDeployment:
     Type: AWS::ApiGateway::Deployment
-    DependsOn: HW2RestAPISearchMethodGET
+    DependsOn: HW2RestAPIPUTMethod
     Properties:
-      Description: Lambda API Deployment
+      Description: HW2 API Deployment
       RestApiId: !Ref HW2RestAPI
 
   HW2RestAPIIamRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: hw2-dd2676-api-gateway-roleX
+      RoleName: hw2-dd2676-api-gateway-role
       Description: Allows API Gateway to push logs to CloudWatch Logs and put binary objects to an S3 bucket.
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -109,7 +101,7 @@ Resources:
       ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
       Policies:
-        - PolicyName: hw2-dd2676-api-gateway-s3-policyX
+        - PolicyName: hw2-dd2676-api-gateway-s3-policy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
