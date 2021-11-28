@@ -13,10 +13,11 @@ phases:
     build:
         commands:
             - echo Starting the build phase on `date`
-            - zip -r hw2_1323_lambdas.zip src/*.py
-            - zip -r hw2_1323_lambda1.zip src/hw2_lambda1.py src/s3.py src/util.py
-            - zip -r hw2_1323_lambda2.zip src/hw2_lambda2.py
-            - zip -r hw2_1323_lambda3.zip src/hw2_lambda3.py
+            - cd src
+            - zip -r hw2_1323_lambdas.zip *.py
+            - zip -r hw2_1323_lambda1.zip hw2_lambda1.py s3.py util.py
+            - zip -r hw2_1323_lambda2.zip hw2_lambda2.py
+            - zip -r hw2_1323_lambda3.zip hw2_lambda3.py
     post_build:
         commands:
             - echo Build completed on `date`

@@ -50,13 +50,13 @@ Resources:
             - sts:AssumeRole
       Path: '/'
       Policies:
-      - PolicyName: root
+      - PolicyName: hw2-1323-admin-access-policy
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
           - Effect: Allow
-            Action: logs:*
-            Resource: arn:aws:logs:*:*:*
+            Action: "*"
+            Resource: "*"
 
   HW2LambdaFunction1:
     # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
@@ -65,7 +65,7 @@ Resources:
       Description: Describe your lambda function here
       FunctionName: hw2_lambda1
       Runtime: python3.8
-      Role: Ref! HW2LambdaFunctionExecutionRole
+      Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
       #Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-1323-repo
@@ -86,7 +86,7 @@ Resources:
       Description: Describe your lambda function here
       FunctionName: hw2_lambda2
       Runtime: python3.8
-      Role: Ref! HW2LambdaFunctionExecutionRole
+      Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
       #Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-1323-repo
@@ -107,7 +107,7 @@ Resources:
       Description: Describe your lambda function here
       FunctionName: hw2_lambda3
       Runtime: python3.8
-      Role: Ref! HW2LambdaFunctionExecutionRole
+      Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
       #Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-1323-repo
