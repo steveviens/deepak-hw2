@@ -26,4 +26,4 @@ artifacts:
         - hw2_1323_lambda1.zip    # Only python code for lambda 1
         - hw2_1323_lambda2.zip    # Only python code for lambda 2
         - hw2_1323_lambda3.zip    # Only python code for lambda 3
-    name: hw2-1323_lambda-build
+    name: hw2_1323_lambda_build
