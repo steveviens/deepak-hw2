@@ -5,14 +5,14 @@ Resources:
   HW2RepoBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: hw2-dd2676-repo
+      BucketName: hw2-1323-repo
       Tags:
         - Key: project
           Value: hw2
-        - Key: student
-          Value: dd2676
+        - Key: account
+          Value: 1323
 
 Outputs:
   HW2RepoBucketARN:
-    Description: 'Output the ARN for the new hw2-dd2676-repo bucket'
+    Description: 'Output the ARN for the new hw2-1323-repo bucket'
     Value: !GetAtt HW2RepoBucket.Arn

@@ -5,8 +5,8 @@ Resources:
   HW2RestAPI:
     Type: AWS::ApiGateway::RestApi
     Properties:
+      Name: hw2-1323-api-gateway
       Description: An api gateway with S3 service integrations
-      Name: hw2-dd2676-api-gateway
       ApiKeySourceType: HEADER
       BinaryMediaTypes:
         - '*/*'
@@ -16,8 +16,8 @@ Resources:
       Tags:
         - Key: project
           Value: hw2
-        - Key: student
-          Value: dd2676
+        - Key: account
+          Value: 1323
 
   HW2RestAPIFolderResource:
     Type: AWS::ApiGateway::Resource
@@ -72,8 +72,8 @@ Resources:
       Tags:
         - Key: project
           Value: hw2
-        - Key: student
-          Value: dd2676
+        - Key: account
+          Value: 1323
 
   HW2RestAPIDeployment:
     Type: AWS::ApiGateway::Deployment
@@ -85,7 +85,7 @@ Resources:
   HW2RestAPIIamRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: hw2-dd2676-api-gateway-role
+      RoleName: hw2-1323-api-gateway-role
       Description: Allows API Gateway to push logs to CloudWatch Logs and put binary objects to an S3 bucket.
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -101,15 +101,15 @@ Resources:
       ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
       Policies:
-        - PolicyName: hw2-dd2676-api-gateway-s3-policy
+        - PolicyName: hw2-1323-api-gateway-s3-policy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
             - Effect: Allow
               Action: s3:PutObject
-              Resource: arn:aws:s3:::hw2-dd2676-photos/*
+              Resource: arn:aws:s3:::hw2-1323-photos/*
       Tags:
         - Key: project
           Value: hw2
-        - Key: student
-          Value: dd2676
+        - Key: account
+          Value: 1323
