@@ -42,7 +42,7 @@ Resources:
         #Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations'
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:677126791323:function:hw2_lambda_function3/invocations'
       ResourceId: !Ref HW2RestAPISearchResource
-      RestApiId: !Ref HW2RestAPI
+      RestApiId: !Ref HW2RestAPI∂ƒ
 
   HW2RestAPIUploadResource:
     Type: AWS::ApiGateway::Resource
@@ -54,7 +54,7 @@ Resources:
   HW2RestAPIUploadMethodPOST:
     Type: AWS::ApiGateway::Method
     Properties:
-      OperationName: 'UploadPicture'
+      OperationName: 'UploadPhoto'
       ApiKeyRequired: false
       AuthorizationType: NONE
       HttpMethod: POST
@@ -65,7 +65,7 @@ Resources:
         PassthroughBehavior: WHEN_NO_MATCH
         TimeoutInMillis: 29000
         Type: AWS
-        Uri: !Sub 'arn:aws:apigateway:us-east-1:s3:path/hw2-4321-photos/{object}'
+        Uri: !Sub 'arn:aws:apigateway:us-east-1:s3:path/{bucket}/{object}'
       ResourceId: !Ref HW2RestAPIUploadResource
       RestApiId: !Ref HW2RestAPI
 
@@ -94,6 +94,8 @@ Resources:
   HW2RestAPIIamRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: hw2-dd2676-api-gateway-roleX
+      Description: Allows API Gateway to push logs to CloudWatch Logs and put binary objects to an S3 bucket.
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -105,11 +107,18 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Path: '/'
+      ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
       Policies:
-      - PolicyName: LambdaAccess
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - Effect: Allow
-            Action: lambda:*
-            Resource: arn:aws:lambda:*:*:*
+        - PolicyName: hw2-dd2676-api-gateway-s3-policyX
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action: s3:PutObject
+              Resource: arn:aws:s3:::hw2-dd2676-photos/*
+      Tags:
+        - Key: project
+          Value: hw2
+        - Key: student
+          Value: dd2676
