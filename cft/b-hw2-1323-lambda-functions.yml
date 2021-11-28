@@ -69,7 +69,7 @@ Resources:
       #Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-1323-repo
-        S3Key: hw2-1323_lambda-build/hw2_1323_lambda1.zip
+        S3Key: hw2-1323-lambda-build/hw2_1323_lambda1.zip
       Handler: hw2_lambda1.lambda_handler
       MemorySize: 256
       Timeout: 10
@@ -90,7 +90,7 @@ Resources:
       #Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-1323-repo
-        S3Key: hw2-1323_lambda-build/hw2_1323_lambda2.zip
+        S3Key: hw2-1323-lambda-build/hw2_1323_lambda2.zip
       Handler: hw2_lambda2.lambda_handler
       MemorySize: 256
       Timeout: 10
@@ -111,7 +111,7 @@ Resources:
       #Role: arn:aws:iam::677126791323:role/viens-lambda-service-role
       Code:
         S3Bucket: hw2-1323-repo
-        S3Key: hw2-1323_lambda-build/hw2_1323_lambda3.zip
+        S3Key: hw2-1323-lambda-build/hw2_1323_lambda3.zip
       Handler: hw2_lambda3.lambda_handler
       MemorySize: 256
       Timeout: 10
