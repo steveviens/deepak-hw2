@@ -53,6 +53,20 @@ Resources:
         Credentials: !GetAtt HW2RestAPIIamRole.Arn
         PassthroughBehavior: WHEN_NO_MATCH
         TimeoutInMillis: 29000
+        IntegrationResponses:
+          - SelectionPattern: ''
+            StatusCode: 200
+            ContentHandling: CONVERT_TO_TEXT
+          - SelectionPattern: 400
+            StatusCode: 400
+            ContentHandling: CONVERT_TO_TEXT
+          - SelectionPattern: 500
+            StatusCode: 500
+            ContentHandling: CONVERT_TO_TEXT
+      MethodResponses:
+        - StatusCode: 200
+        - StatusCode: 400
+        - StatusCode: 500
       ResourceId: !Ref HW2RestAPIObjectResource
       RestApiId: !Ref HW2RestAPI
 
