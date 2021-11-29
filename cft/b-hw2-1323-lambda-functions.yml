@@ -62,7 +62,7 @@ Resources:
     # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
     Type: AWS::Lambda::Function
     Properties:
-      Description: Describe your lambda function here
+      Description: Invoke AWS Rekognition with bucket name & object key to uploaded photo
       FunctionName: hw2_lambda1
       Runtime: python3.8
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
@@ -78,11 +78,20 @@ Resources:
         - Key: account
           Value: 1323
 
+  #HW2LambdaFunction2Permission:
+  #  Type: AWS::Lambda::Permission
+  #  Properties:
+  #    Action: 'lambda:InvokeFunction'
+  #    FunctionName: !Ref HW2LambdaFunction2
+  #    Principal: apigateway.amazonaws.com
+  #    SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:aeh1penrif/*/*/*'
+  #    SourceAccount: !Ref AWS::AccountId
+
   HW2LambdaFunction2:
     # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
     Type: AWS::Lambda::Function
     Properties:
-      Description: Describe your lambda function here
+      Description: Search for photos in Open Search domain
       FunctionName: hw2_lambda2
       Runtime: python3.8
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
@@ -102,7 +111,7 @@ Resources:
     # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
     Type: AWS::Lambda::Function
     Properties:
-      Description: Describe your lambda function here
+      Description: Describe hw2_lambda3 here
       FunctionName: hw2_lambda3
       Runtime: python3.8
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
