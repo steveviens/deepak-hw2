@@ -26,17 +26,25 @@ Resources:
       PathPart: 'search'
       RestApiId: !Ref HW2RestAPI
 
-  HW2RestAPIUploadResource:
+  HW2RestAPISearchGETMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      ApiKeyRequired: false
+      AuthorizationType: NONE
+      HttpMethod: GET
+      RestApiId: !Ref HW2RestAPI
+
+  HW2RestAPIPhotosResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt HW2RestAPI.RootResourceId
-      PathPart: 'upload'
+      PathPart: 'photos'
       RestApiId: !Ref HW2RestAPI
 
   HW2RestAPIFolderResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !Ref HW2RestAPIUploadResource
+      ParentId: !Ref HW2RestAPIPhotosResource
       PathPart: '{folder}'
       RestApiId: !Ref HW2RestAPI
 
@@ -47,7 +55,7 @@ Resources:
       PathPart: '{object}'
       RestApiId: !Ref HW2RestAPI
 
-  HW2RestAPIPUTMethod:
+  HW2RestAPIPhotosPUTMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       ApiKeyRequired: false
@@ -105,7 +113,7 @@ Resources:
 
   HW2RestAPIDeployment:
     Type: AWS::ApiGateway::Deployment
-    DependsOn: HW2RestAPIPUTMethod
+    DependsOn: HW2RestAPIPhotosPUTMethod
     Properties:
       Description: HW2 API Deployment
       RestApiId: !Ref HW2RestAPI

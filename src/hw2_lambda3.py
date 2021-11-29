@@ -1,8 +1,16 @@
+import boto3
 import json
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
-    # TODO implement
+
+    # Print formatted JSON event object to log
+    logger.info(json.dumps(event, indent=2, sort_keys=False))
+
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda Function 3!')
