@@ -5,9 +5,9 @@ Resources:
   HW2PhotosBucket:
     # Source: https://www.itonaut.com/2018/10/03/implement-s3-bucket-lambda-triggers-in-aws-cloudformation/
     Type: AWS::S3::Bucket
-    DependsOn: HW2LambdaFunction1Permission
+    DependsOn: HW2TriggerLambdaFunction1Permission
     Properties:
-      BucketName: hw2-1323-photos
+      BucketName: 'hw2-1323-photos'
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: s3:ObjectCreated:*
@@ -23,18 +23,16 @@ Resources:
         - Key: account
           Value: 1323
 
-  HW2LambdaFunction1Permission:
-    # Source: https://www.itonaut.com/2018/10/03/implement-s3-bucket-lambda-triggers-in-aws-cloudformation/
+  HW2TriggerLambdaFunction1Permission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: 'lambda:InvokeFunction'
-      FunctionName: !Ref HW2LambdaFunction1
+      FunctionName: !GetAtt HW2LambdaFunction1.Arn
       Principal: s3.amazonaws.com
       SourceArn: !Sub 'arn:aws:s3:::hw2-1323-photos'
       SourceAccount: !Ref AWS::AccountId
 
   HW2LambdaFunctionExecutionRole:
-    # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-tags
     Type: AWS::IAM::Role
     Properties:
       RoleName: hw2-1323-lambda-function-execution-role
@@ -59,10 +57,9 @@ Resources:
             Resource: "*"
 
   HW2LambdaFunction1:
-    # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
     Type: AWS::Lambda::Function
     Properties:
-      Description: Invoke AWS Rekognition with bucket name & object key to uploaded photo
+      Description: Uses AWS Rekognition to scan photos uploaded to S3 bucket
       FunctionName: hw2_lambda1
       Runtime: python3.8
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
@@ -78,17 +75,7 @@ Resources:
         - Key: account
           Value: 1323
 
-  #HW2LambdaFunction2Permission:
-  #  Type: AWS::Lambda::Permission
-  #  Properties:
-  #    Action: 'lambda:InvokeFunction'
-  #    FunctionName: !Ref HW2LambdaFunction2
-  #    Principal: apigateway.amazonaws.com
-  #    SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:aeh1penrif/*/*/*'
-  #    SourceAccount: !Ref AWS::AccountId
-
   HW2LambdaFunction2:
-    # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
     Type: AWS::Lambda::Function
     Properties:
       Description: Search for photos in Open Search domain
