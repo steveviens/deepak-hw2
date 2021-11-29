@@ -19,10 +19,24 @@ Resources:
         - Key: account
           Value: 1323
 
-  HW2RestAPIFolderResource:
+  HW2RestAPISearchResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt HW2RestAPI.RootResourceId
+      PathPart: 'search'
+      RestApiId: !Ref HW2RestAPI
+
+  HW2RestAPIUploadResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt HW2RestAPI.RootResourceId
+      PathPart: 'upload'
+      RestApiId: !Ref HW2RestAPI
+
+  HW2RestAPIFolderResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref HW2RestAPIUploadResource
       PathPart: '{folder}'
       RestApiId: !Ref HW2RestAPI
 
