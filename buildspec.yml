@@ -13,11 +13,15 @@ phases:
     build:
         commands:
             - echo "Creating hw2_1323_lambdas.zip file."
-            - zip -r -j hw2_1323_lambdas.zip src/*.py
+            - zip -r -j hw2_1323_lambda1.zip src/hw2_lambda1.py src/util.py src/s3.py
+            - zip -r -j hw2_1323_lambda2.zip src/hw2_lambda2.py
+            - zip -r -j hw2_1323_lambda3.zip src/hw2_lambda3.py
     post_build:
         commands:
             - echo "Updating lambda function code."
-            - aws lambda update-function-code --function-name "hw2_lambda3" --zip-file fileb://./hw2_1323_lambdas.zip
+            - aws lambda update-function-code --function-name "hw2_lambda1" --zip-file fileb://./hw2_1323_lambda1.zip
+            - aws lambda update-function-code --function-name "hw2_lambda2" --zip-file fileb://./hw2_1323_lambda2.zip
+            - aws lambda update-function-code --function-name "hw2_lambda3" --zip-file fileb://./hw2_1323_lambda3.zip
             #- aws lambda publish-version --function-name "hw2_lambda3"
 artifacts:
     name: hw2_1323_lambda_build
