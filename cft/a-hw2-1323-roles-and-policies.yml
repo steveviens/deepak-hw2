@@ -47,6 +47,8 @@ Resources:
                   - "lambda:RemovePermission"
                   - "lambda:UpdateFunctionCode"
                   - "lambda:UpdateFunctionConfiguration"
+                  - "lambda:PublishVersion"
+                  - "lambda:EnableReplication"
                 Resource:
                   #- !Sub "arn:aws:lambda:::function*"
                   - !Sub "arn:aws:lambda:*:${AWS::AccountId}:function:*"
