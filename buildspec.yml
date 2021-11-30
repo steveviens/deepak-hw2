@@ -4,20 +4,22 @@ phases:
         runtime-versions:
             python: 3.8
         commands:
-            - echo Capturing the AWS CLI and Python versions used in this build
+            - echo "Capturing the AWS CLI and Python versions used in this build."
             - aws --version
             - python --version
     pre_build:
         commands:
-            - echo Nothing to do in the pre_build phase.
+            - echo "Nothing to do in the pre_build phase."
     build:
         commands:
-            - echo Starting the build phase on `date`
+            - echo "Creating hw2_1323_lambdas.zip file."
             - zip -r -j hw2_1323_lambdas.zip src/*.py
     post_build:
         commands:
-            - echo Build completed on `date`
+            - echo "Updating lambda function code."
+            - aws lambda update-function-code --function-name "hw2_lambda3" --zip-file fileb://./hw2_1323_lambdas.zip
+            - aws lambda publish-version --function-name "hw2_lambda3"
 artifacts:
-    files:
-        - hw2_1323_lambdas.zip    # Python code for all lambdas in one zip file
     name: hw2_1323_lambda_build
+    files:
+        - './appspec.yml'
