@@ -18,7 +18,7 @@ phases:
         commands:
             - echo "Updating lambda function code."
             - aws lambda update-function-code --function-name "hw2_lambda3" --zip-file fileb://./hw2_1323_lambdas.zip
-            - aws lambda publish-version --function-name "hw2_lambda3"
+            #- aws lambda publish-version --function-name "hw2_lambda3"
 artifacts:
     name: hw2_1323_lambda_build
     files:
