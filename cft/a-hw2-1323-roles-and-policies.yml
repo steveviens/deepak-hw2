@@ -48,7 +48,8 @@ Resources:
                   - "lambda:UpdateFunctionCode"
                   - "lambda:UpdateFunctionConfiguration"
                 Resource:
-                  - !Sub "arn:aws:lambda:::function*"
+                  #- !Sub "arn:aws:lambda:::function*"
+                  - !Sub "arn:aws:lambda:*:${AWS::AccountId}:function:*"
               - Effect: Allow
                 Action:
                   - 's3:PutObject'
