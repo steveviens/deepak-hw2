@@ -1,22 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Creates Policies and Roles used throughout HW2
-Metadata:
-  'AWS::CloudFormation::Designer':
-    131ddf1b-4da0-4412-90b8-abcc521cc777:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 370
-        'y': 220
-      z: 0
-      embeds: []
 Resources:
   HW2CodePipelineServiceRole:
     Type: 'AWS::IAM::Role'
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 131ddf1b-4da0-4412-90b8-abcc521cc777
     Properties:
       RoleName: hw2-1323-code-pipeline-service-role
       Description: Allows CodePipeline to do it's thing.
