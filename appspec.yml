@@ -1,0 +1,12 @@
+version: 0.0
+resources:
+  - HW2LambdaFunction3:
+    Type: AWS::Lambda::Function
+    Properties:
+      Name: "hw2_lambda3"
+      Alias: "hw2_lambda3_alias"
+      CurrentVersion: "1"
+      TargetVersion: "2"
+hooks:
+  - BeforeAllowTraffic: "hw2_validate_before_lambda"
+  - AfterAllowTraffic: "hw2_validate_after_lambda"
