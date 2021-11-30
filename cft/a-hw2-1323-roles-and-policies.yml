@@ -1,80 +1,105 @@
-AWSTemplateFormatVersion: "2010-09-09"
-Description: 'Creates Policies and Roles used throughout HW2'
+AWSTemplateFormatVersion: 2010-09-09
+Description: Creates Policies and Roles used throughout HW2
+Metadata:
+  'AWS::CloudFormation::Designer':
+    131ddf1b-4da0-4412-90b8-abcc521cc777:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 370
+        'y': 220
+      z: 0
+      embeds: []
 Resources:
-
   HW2CodePipelineServiceRole:
-    Type: AWS::IAM::Role
+    Type: 'AWS::IAM::Role'
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 131ddf1b-4da0-4412-90b8-abcc521cc777
     Properties:
-      RoleName: 'hw2-1323-code-pipeline-service-role'
+      RoleName: hw2-1323-code-pipeline-service-role
       Description: Allows CodePipeline to do it's thing.
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: 2012-10-17
         Statement:
           - Effect: Allow
             Principal:
               Service:
                 - codepipeline.amazonaws.com
                 - codebuild.amazonaws.com
-            Action: "sts:AssumeRole"
+                - codedeploy.amazonaws.com
+            Action: 'sts:AssumeRole'
       Path: /
       Policies:
         - PolicyName: hw2-1323-code-pipeline-policy
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: 2012-10-17
             Statement:
               - Effect: Allow
                 Action:
-                  - "s3:PutObject"
-                  - "s3:GetObject"
-                  - "s3:GetObjectVersion"
-                  - "s3:GetBucketAcl"
-                  - "s3:GetBucketLocation"
+                  - "lambda:AddPermission"
+                  - "lambda:CreateFunction"
+                  - "lambda:DeleteFunction"
+                  - "lambda:GetFunction"
+                  - "lambda:GetFunctionConfiguration"
+                  - "lambda:PutFunctionConcurrency"
+                  - "lambda:RemovePermission"
+                  - "lambda:UpdateFunctionCode"
+                  - "lambda:UpdateFunctionConfiguration"
                 Resource:
-                  - !Sub "arn:aws:s3:::hw2-1323-repo*"
+                  - !Sub "arn:aws:lambda:::function*"
               - Effect: Allow
                 Action:
-                  - "logs:CreateLogGroup"
-                  - "logs:CreateLogStream"
-                  - "logs:PutLogEvents"
+                  - 's3:PutObject'
+                  - 's3:GetObject'
+                  - 's3:GetObjectVersion'
+                  - 's3:GetBucketAcl'
+                  - 's3:GetBucketLocation'
                 Resource:
-                  - !Sub "arn:aws:logs:*:${AWS::AccountId}:log-group:/aws/codebuild/*"
-                  - !Sub "arn:aws:logs:*:${AWS::AccountId}:log-group:/aws/codebuild/*:log-stream:*"
+                  - !Sub 'arn:aws:s3:::hw2-1323-repo*'
               - Effect: Allow
                 Action:
-                  - "codebuild:BatchGetBuilds"
-                  - "codebuild:StartBuild"
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
                 Resource:
-                  - !Sub "arn:aws:codebuild:*:${AWS::AccountId}:project/hw2-1323-code-build-deploy2stage" #CodeBuild project we've created earlier
-                  - !Sub "arn:aws:codebuild:*:${AWS::AccountId}:project/hw2-1323-code-build-deploy2prod" #CodeBuild project we've created earlier
+                  - !Sub 'arn:aws:logs:*:${AWS::AccountId}:log-group:/aws/codebuild/*'
+                  - !Sub >-
+                    arn:aws:logs:*:${AWS::AccountId}:log-group:/aws/codebuild/*:log-stream:*
               - Effect: Allow
                 Action:
-                  - "iam:GetRole"
-                  - "iam:GetRolePolicy"
-                Resource: !Sub "arn:aws:iam::${AWS::AccountId}*"
-              - Effect: Allow
-                Action:
-                  - "cloudformation:CreateStack"
-                  - "cloudformation:UpdateStack"
-                  - "cloudformation:DeleteStack"
-                  - "cloudformation:Describe*"
-                  - "cloudformation:List*"
-                  - "cloudformation:Get*"
-                  - "cloudformation:PreviewStackUpdate"
-                  - "cloudformation:ValidateTemplate"
-                Resource: !Sub "arn:aws:cloudformation:*:${AWS::AccountId}:stack/*"
-              - Effect: Allow
-                Action:
-                  - "logs:CreateLogGroup"
-                  - "logs:CreateLogStream"
-                  - "logs:DeleteLogGroup"
-                  - "logs:DeleteLogStream"
-                  - "logs:DescribeLog*"
-                  - "logs:FilterLogEvents"
+                  - 'codebuild:BatchGetBuilds'
+                  - 'codebuild:StartBuild'
                 Resource:
-                  - !Sub "arn:aws:logs:*:${AWS::AccountId}:log-group::log-stream*"
-
-
-Outputs:
-  HW2CodePipelineServiceRole:
-    Description: 'Output ARN for hw2-1323-code-pipeline-service-role'
-    Value: !GetAtt HW2RepoBucket.Arn
+                  - !Sub >-
+                    arn:aws:codebuild:*:${AWS::AccountId}:project/hw2-1323-code-build-deploy2stage
+                  - !Sub >-
+                    arn:aws:codebuild:*:${AWS::AccountId}:project/hw2-1323-code-build-deploy2prod
+              - Effect: Allow
+                Action:
+                  - 'iam:GetRole'
+                  - 'iam:GetRolePolicy'
+                Resource: !Sub 'arn:aws:iam::${AWS::AccountId}*'
+              - Effect: Allow
+                Action:
+                  - 'cloudformation:CreateStack'
+                  - 'cloudformation:UpdateStack'
+                  - 'cloudformation:DeleteStack'
+                  - 'cloudformation:Describe*'
+                  - 'cloudformation:List*'
+                  - 'cloudformation:Get*'
+                  - 'cloudformation:PreviewStackUpdate'
+                  - 'cloudformation:ValidateTemplate'
+                Resource: !Sub 'arn:aws:cloudformation:*:${AWS::AccountId}:stack/*'
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                  - 'logs:DeleteLogGroup'
+                  - 'logs:DeleteLogStream'
+                  - 'logs:DescribeLog*'
+                  - 'logs:FilterLogEvents'
+                Resource:
+                  - !Sub 'arn:aws:logs:*:${AWS::AccountId}:log-group::log-stream*'
