@@ -65,7 +65,7 @@ Resources:
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
       Code:
         S3Bucket: hw2-1323-repo
-        S3Key: hw2_1323_lambda_build/hw2_1323_lambda1.zip
+        S3Key: hw2_1323_lambda_build/hw2_1323_lambdas.zip
       Handler: hw2_lambda1.lambda_handler
       MemorySize: 256
       Timeout: 10
@@ -84,7 +84,7 @@ Resources:
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
       Code:
         S3Bucket: hw2-1323-repo
-        S3Key: hw2_1323_lambda_build/hw2_1323_lambda2.zip
+        S3Key: hw2_1323_lambda_build/hw2_1323_lambdas.zip
       Handler: hw2_lambda2.lambda_handler
       MemorySize: 256
       Timeout: 10
@@ -104,7 +104,7 @@ Resources:
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
       Code:
         S3Bucket: hw2-1323-repo
-        S3Key: hw2_1323_lambda_build/hw2_1323_lambda3.zip
+        S3Key: hw2_1323_lambda_build/hw2_1323_lambdas.zip
       Handler: hw2_lambda3.lambda_handler
       MemorySize: 256
       Timeout: 10
