@@ -9,15 +9,16 @@ phases:
             - python --version
     pre_build:
         commands:
-            - echo "Nothing to do in the pre_build phase."
     build:
         commands:
-            - echo "Creating hw2_1323_lambdas.zip file."
+            - echo Build started on `date`
+            - zip -r hw2_1323_lambdas.zip .
             - zip -r -j hw2_1323_lambda1.zip src/hw2_lambda1.py src/util.py src/s3.py
             - zip -r -j hw2_1323_lambda2.zip src/hw2_lambda2.py
             - zip -r -j hw2_1323_lambda3.zip src/hw2_lambda3.py
     post_build:
         commands:
+            - echo Build completed on `date`
             - echo "Updating lambda function code."
             - aws lambda update-function-code --function-name "hw2_lambda1" --zip-file fileb://./hw2_1323_lambda1.zip
             - aws lambda update-function-code --function-name "hw2_lambda2" --zip-file fileb://./hw2_1323_lambda2.zip
@@ -26,4 +27,6 @@ phases:
 artifacts:
     name: hw2_1323_lambda_build
     files:
+        - 'hw2_1323_lambdas.zip'
         - './appspec.yml'
+    discard-paths: yes
