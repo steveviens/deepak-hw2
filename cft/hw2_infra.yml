@@ -1,11 +1,97 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: 'Creates API Gateway for Homework #2'
+Description: "Creates AWS Resources for Homework #2"
 Resources:
+
+  HW2PhotosBucket:
+    Type: AWS::S3::Bucket
+    DependsOn: HW2TriggerIndexPhotosLambdaPermission
+    Properties:
+      BucketName: 'hw2-1323-photos'
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Function: !GetAtt HW2IndexPhotosLambda.Arn
+            Filter:
+              S3Key:
+                Rules:
+                - Name: suffix
+                  Value: .jpeg
+
+  HW2TriggerIndexPhotosLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !GetAtt HW2IndexPhotosLambda.Arn
+      Principal: s3.amazonaws.com
+      SourceArn: !Sub 'arn:aws:s3:::hw2-1323-photos'
+      SourceAccount: !Ref AWS::AccountId
+
+  HW2LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: hw2-lambda-function-execution-role
+      Description: Describe this IAM role here
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action:
+            - sts:AssumeRole
+      Path: '/'
+      Policies:
+      - PolicyName: hw2-admin-access-policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action: "*"
+            Resource: "*"
+
+  HW2IndexPhotosLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Uses AWS Rekognition to scan photos uploaded to S3 bucket
+      FunctionName: hw2-index-photos-function
+      Runtime: python3.8
+      Role: !GetAtt HW2LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          def lambda_handler(event, context):
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('Hello from hw2_index_photos_function.py!')
+              }
+      Handler: hw2_index_lambda.lambda_handler
+      MemorySize: 256
+      Timeout: 10
+
+  HW2SearchPhotosLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Search for photos in Open Search domain
+      FunctionName: hw2-search-photos-function
+      Runtime: python3.8
+      Role: !GetAtt HW2LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          def lambda_handler(event, context):
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('Hello from hw2_search_photos_function.py!')
+              }
+      Handler: hw2_search_lambda.lambda_handler
+      MemorySize: 256
+      Timeout: 10
 
   HW2RestAPI:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: hw2-1323-api-gateway
+      Name: hw2-api-gateway
       Description: An api gateway with S3 service integrations
       ApiKeySourceType: HEADER
       BinaryMediaTypes:
@@ -19,14 +105,12 @@ Resources:
         - Key: account
           Value: 1323
 
-
   HW2RestAPISearchResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt HW2RestAPI.RootResourceId
       PathPart: 'search'
       RestApiId: !Ref HW2RestAPI
-
 
   HW2RestAPISearchGETMethod:
     Type: AWS::ApiGateway::Method
@@ -47,14 +131,13 @@ Resources:
                 - !Ref AWS::Region
                 - ':'
                 - !Ref AWS::AccountId
-                - ':function:hw2_lambda2'
+                - ':function:hw2-search-photos-function'
         Credentials: !GetAtt HW2RestAPIIamRole.Arn
         IntegrationResponses:
           - SelectionPattern: ''
             StatusCode: 200
       MethodResponses:
         - StatusCode: 200
-
 
   HW2RestAPIPhotosResource:
     Type: AWS::ApiGateway::Resource
@@ -63,7 +146,6 @@ Resources:
       PathPart: 'photos'
       RestApiId: !Ref HW2RestAPI
 
-
   HW2RestAPIFolderResource:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -71,14 +153,12 @@ Resources:
       PathPart: '{folder}'
       RestApiId: !Ref HW2RestAPI
 
-
   HW2RestAPIObjectResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref HW2RestAPIFolderResource
       PathPart: '{object}'
       RestApiId: !Ref HW2RestAPI
-
 
   HW2RestAPIPhotosPUTMethod:
     Type: AWS::ApiGateway::Method
@@ -117,7 +197,6 @@ Resources:
         - StatusCode: 400
         - StatusCode: 500
 
-
   HW2RestAPIStage:
     Type: AWS::ApiGateway::Stage
     Properties:
@@ -131,12 +210,6 @@ Resources:
           LoggingLevel: INFO   # VALID VALUES ARE OFF, ERROR and INFO
           DataTraceEnabled: true
           MetricsEnabled: false
-      Tags:
-        - Key: project
-          Value: hw2
-        - Key: account
-          Value: 1323
-
 
   HW2RestAPIDeployment:
     Type: AWS::ApiGateway::Deployment
@@ -145,11 +218,10 @@ Resources:
       Description: HW2 API Deployment
       RestApiId: !Ref HW2RestAPI
 
-
   HW2RestAPIIamRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: hw2-1323-api-gateway-role
+      RoleName: hw2-api-gateway-role
       Description: Allows API Gateway to push logs to CloudWatch Logs and put binary objects to an S3 bucket.
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -166,25 +238,19 @@ Resources:
           - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
           #- arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
-        - PolicyName: hw2-1323-api-gateway-s3-policy
+        - PolicyName: hw2-api-gateway-s3-policy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
             - Effect: Allow
               Action: s3:PutObject
               Resource: arn:aws:s3:::hw2-1323-photos/*
-      Tags:
-        - Key: project
-          Value: hw2
-        - Key: account
-          Value: 1323
-
 
   HW2RestAPIIamPolicy:
     Type: 'AWS::IAM::Policy'
     DependsOn: HW2RestAPIIamRole
     Properties:
-      PolicyName: hw2-1323-api-gateway_lambda_policy
+      PolicyName: hw2-api-gateway_lambda_policy
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -193,3 +259,8 @@ Resources:
             Resource: '*'
       Roles:
         - Ref: HW2RestAPIIamRole
+
+Outputs:
+  HW2PhotosBucketARN:
+    Description: 'The ARN for the hw2-1323-photos bucket'
+    Value: !GetAtt HW2PhotosBucket.Arn

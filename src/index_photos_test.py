@@ -1,7 +1,7 @@
 import json
 import logging
 import sys
-import hw2_lambda1
+import index_photos_function
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -47,6 +47,6 @@ s3_trigger_event = {
     ]
 }
 
-results = lambda_function_1.lambda_handler(s3_trigger_event, context={})
+results = index_photos_function.lambda_handler(s3_trigger_event, context={})
 print("HTTP STATUS  = {}".format(results.get('statusCode')))
 print('RESULTS={}'.format(json.dumps(results, indent=2, sort_keys=False)))
