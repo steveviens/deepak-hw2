@@ -2,12 +2,12 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: 'Creates Homework #2 CodeBuild Project'
 Resources:
 
-  HW3CodeBuildProject:
+  HW2CodeBuildProject:
     Type: 'AWS::CodeBuild::Project'
     Properties:
       Name: hw2-lambda-build
-      Description: Build and deploy HW3 lambda function
-      ServiceRole: !GetAtt HW3CodeBuildServiceRole.Arn
+      Description: Build and deploy HW2 lambda function
+      ServiceRole: !GetAtt HW2CodeBuildServiceRole.Arn
       Artifacts:
         Type: NO_ARTIFACTS
       Environment:
@@ -26,7 +26,7 @@ Resources:
             Pattern: PUSH
       TimeoutInMinutes: 10
 
-  HW3CodeBuildServiceRole:
+  HW2CodeBuildServiceRole:
     Type: 'AWS::IAM::Role'
     Properties:
       RoleName: hw2-code-pipeline-service-role
