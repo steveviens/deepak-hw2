@@ -64,8 +64,13 @@ Resources:
       Runtime: python3.8
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
       Code:
-        S3Bucket: hw2-1323-repo
-        S3Key: hw2_1323_lambda_build/hw2_1323_lambdas.zip
+        ZipFile: |
+          import json
+          def lambda_handler(event, context):
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('Hello from hw2_lambda1.py!')
+              }
       Handler: hw2_lambda1.lambda_handler
       MemorySize: 256
       Timeout: 10
@@ -83,29 +88,14 @@ Resources:
       Runtime: python3.8
       Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
       Code:
-        S3Bucket: hw2-1323-repo
-        S3Key: hw2_1323_lambda_build/hw2_1323_lambdas.zip
+        ZipFile: |
+          import json
+          def lambda_handler(event, context):
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('Hello from hw2_lambda2.py!')
+              }
       Handler: hw2_lambda2.lambda_handler
-      MemorySize: 256
-      Timeout: 10
-      Tags:
-        - Key: project
-          Value: hw2
-        - Key: account
-          Value: 1323
-
-  HW2LambdaFunction3:
-    # Source: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
-    Type: AWS::Lambda::Function
-    Properties:
-      Description: Describe hw2_lambda3 here
-      FunctionName: hw2_lambda3
-      Runtime: python3.8
-      Role: !GetAtt HW2LambdaFunctionExecutionRole.Arn
-      Code:
-        S3Bucket: hw2-1323-repo
-        S3Key: hw2_1323_lambda_build/hw2_1323_lambdas.zip
-      Handler: hw2_lambda3.lambda_handler
       MemorySize: 256
       Timeout: 10
       Tags:

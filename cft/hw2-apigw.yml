@@ -19,12 +19,14 @@ Resources:
         - Key: account
           Value: 1323
 
+
   HW2RestAPISearchResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !GetAtt HW2RestAPI.RootResourceId
       PathPart: 'search'
       RestApiId: !Ref HW2RestAPI
+
 
   HW2RestAPISearchGETMethod:
     Type: AWS::ApiGateway::Method
@@ -61,6 +63,7 @@ Resources:
       PathPart: 'photos'
       RestApiId: !Ref HW2RestAPI
 
+
   HW2RestAPIFolderResource:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -68,12 +71,14 @@ Resources:
       PathPart: '{folder}'
       RestApiId: !Ref HW2RestAPI
 
+
   HW2RestAPIObjectResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId: !Ref HW2RestAPIFolderResource
       PathPart: '{object}'
       RestApiId: !Ref HW2RestAPI
+
 
   HW2RestAPIPhotosPUTMethod:
     Type: AWS::ApiGateway::Method
@@ -132,12 +137,14 @@ Resources:
         - Key: account
           Value: 1323
 
+
   HW2RestAPIDeployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn: HW2RestAPIPhotosPUTMethod
     Properties:
       Description: HW2 API Deployment
       RestApiId: !Ref HW2RestAPI
+
 
   HW2RestAPIIamRole:
     Type: AWS::IAM::Role
@@ -171,6 +178,7 @@ Resources:
           Value: hw2
         - Key: account
           Value: 1323
+
 
   HW2RestAPIIamPolicy:
     Type: 'AWS::IAM::Policy'
