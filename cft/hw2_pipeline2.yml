@@ -17,7 +17,7 @@ Resources:
       Source:
         Type: GITHUB
         #Auth: OAUTH
-        Location: https://github.com/steveviens/deepak-assignment3.git
+        Location: https://github.com/steveviens/deepak-assignment2.git
       Triggers:
         BuildType: BUILD
         Webhook: True
