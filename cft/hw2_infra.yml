@@ -236,7 +236,6 @@ Resources:
       Path: '/'
       ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
-          #- arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
         - PolicyName: hw2-api-gateway-s3-policy
           PolicyDocument:
