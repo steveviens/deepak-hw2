@@ -63,9 +63,9 @@ Resources:
           def lambda_handler(event, context):
               return {
                   'statusCode': 200,
-                  'body': json.dumps('Hello from hw2_index_photos_function.py!')
+                  'body': json.dumps('Hello from hw2-index-photos-function!')
               }
-      Handler: hw2_index_lambda.lambda_handler
+      Handler: index_photos_function.lambda_handler
       MemorySize: 256
       Timeout: 10
 
@@ -82,9 +82,9 @@ Resources:
           def lambda_handler(event, context):
               return {
                   'statusCode': 200,
-                  'body': json.dumps('Hello from hw2_search_photos_function.py!')
+                  'body': json.dumps('Hello from hw2-search-photos-function!')
               }
-      Handler: hw2_search_lambda.lambda_handler
+      Handler: search_photos_function.lambda_handler
       MemorySize: 256
       Timeout: 10
 
