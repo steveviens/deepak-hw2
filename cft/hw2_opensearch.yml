@@ -35,14 +35,14 @@ Resources:
       EngineVersion:
         Ref: EngineVersion
       ClusterConfig:
-        InstanceCount: '1'
+        InstanceCount: '2'
         InstanceType:
           Ref: InstanceType
       EBSOptions:
         EBSEnabled: true
         Iops: '0'
         VolumeSize: '10'
-        VolumeType: 'standard'
+        VolumeType: 'gp2'
       AccessPolicies:
         Version: '2012-10-17'
         Statement:

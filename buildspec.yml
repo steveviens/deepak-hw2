@@ -11,12 +11,17 @@ phases:
         commands:
     build:
         commands:
-            - echo Build started on `date`
+            - echo Building hw2 lambdas started on `date`
             - zip -r -j index_photos_function.zip src/index_photos_function.py
             - zip -r -j search_photos_function.zip src/search_photos_function.py
+            - echo Building hw2 javascript SDK started on `date`
+            - aws apigateway get-sdk --rest-api-id d8n5fb21w7 --stage-name v1 --sdk-type javascript ./hw2-api-js-sdk.zip
     post_build:
         commands:
             - echo Build completed on `date`
             - echo "Updating lambda function code."
             - aws lambda update-function-code --function-name "hw2-index-photos-function" --zip-file fileb://./index_photos_function.zip
             - aws lambda update-function-code --function-name "hw2-search-photos-function" --zip-file fileb://./search_photos_function.zip
+artifacts:
+    files:
+        - hw2-js-sdk.zip

@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: 'Creates Homework #2 CodeBuild Project'
 Resources:
 
-  HW2CodeBuildProject:
+  HW2LambdaCodeBuildProject:
     Type: 'AWS::CodeBuild::Project'
     Properties:
       Name: hw2-lambda-build
@@ -16,8 +16,37 @@ Resources:
         Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
       Source:
         Type: GITHUB
-        #Auth: OAUTH
-        Location: https://github.com/steveviens/deepak-assignment2.git
+        Location: https://github.com/steveviens/deepak-hw2-backend.git
+      Triggers:
+        BuildType: BUILD
+        Webhook: True
+        FilterGroups:
+        - - Type: EVENT
+            Pattern: PUSH
+      TimeoutInMinutes: 10
+
+  HW2RepoBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: 'hw2-1323-repo'
+
+  HW2ClientSDKCodeBuildProject:
+    Type: 'AWS::CodeBuild::Project'
+    Properties:
+      Name: hw2-client-sdk-build
+      Description: Build and deploy HW2 Client JavaScript SDK
+      ServiceRole: !GetAtt HW2CodeBuildServiceRole.Arn
+      Artifacts:
+        Type: S3
+        Name: '/'
+        Location: !Ref HW2RepoBucket
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+      Source:
+        Type: GITHUB
+        Location: https://github.com/steveviens/deepak-hw2-frontend.git
       Triggers:
         BuildType: BUILD
         Webhook: True
@@ -106,6 +135,11 @@ Resources:
                   - 'cloudformation:PreviewStackUpdate'
                   - 'cloudformation:ValidateTemplate'
                 Resource: !Sub 'arn:aws:cloudformation:*:${AWS::AccountId}:stack/*'
+              - Effect: Allow
+                Action:
+                  - 'apigateway:GET'
+                Resource:
+                  - !Sub 'arn:aws:apigateway:*::/restapis/d8n5fb21w7/stages/v1*'
               - Effect: Allow
                 Action:
                   - 'logs:CreateLogGroup'
