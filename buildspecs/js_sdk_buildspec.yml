@@ -6,8 +6,8 @@ phases:
             - aws --version
     pre_build:
         commands:
-            - aws apigateway get-rest-apis --output text
-            #- aws apigateway get-rest-apis --query 'items[?name==`hw2-api-gateway`].[id]' --output text
+            #- aws apigateway get-rest-apis --output text
+            - aws apigateway get-rest-apis --query 'items[?name==`hw2-api-gateway`].[id]' --output text
             #- api_id=$(aws apigateway get-rest-apis --query 'items[?name==`hw2-api-gateway`].[id]' --output text)
     build:
         commands:
