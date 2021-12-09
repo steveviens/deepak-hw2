@@ -24,7 +24,7 @@ Resources:
       Source:
         Type: GITHUB
         Location: https://github.com/steveviens/deepak-hw2.git
-        BuildSpec: 'buildspecs/js_sdk_buildspec.yml'
+        BuildSpec: 'buildspec/js_sdk_buildspec.yml'
       Triggers:
         BuildType: BUILD
         Webhook: True
@@ -48,7 +48,7 @@ Resources:
       Source:
         Type: GITHUB
         Location: https://github.com/steveviens/deepak-hw2.git
-        BuildSpec: 'buildspecs/lambda_buildspec.yml'
+        BuildSpec: 'buildspec/lambda_buildspec.yml'
       Triggers:
         BuildType: BUILD
         Webhook: True
