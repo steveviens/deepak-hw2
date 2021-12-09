@@ -25,10 +25,6 @@ Parameters:
     Type: String
     Default: 10.0.0.0/24
 
-  GroupDescription:
-    Type: String
-    Default: HW2 open search security group
-
   SGName:
     Type: String
     Default: hw2-security-group
@@ -69,9 +65,9 @@ Resources:
         SubnetIds:
           - Ref: subnet
         SecurityGroupIds:
-          - Ref: securityGroup
+          - Ref: SecurityGroup
 
-  vpc:
+  Vpc:
     Type: 'AWS::EC2::VPC'
     Properties:
       CidrBlock: 10.0.0.0/24
@@ -81,11 +77,11 @@ Resources:
         - Key: project
           Value: hw2
 
-  subnet:
+  Subnet:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId:
-        Ref: vpc
+        Ref: Vpc
       CidrBlock:
         Ref: CidrBlock
       AvailabilityZone:
@@ -96,15 +92,14 @@ Resources:
         - Key: project
           Value: hw2
 
-  securityGroup:
+  SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      GroupDescription:
-        Ref: GroupDescription
+      GroupDescription: 'HW2 Open Search Security Group'
       VpcId:
-        Ref: vpc
+        Ref: Vpc
       GroupName:
-        Ref: SGName
+        Ref: 'hw2-security-group'
       SecurityGroupIngress:
         - FromPort: 443
           IpProtocol: tcp
@@ -113,11 +108,11 @@ Resources:
       Tags:
         - Key: Name
           Value:
-            Ref: SGName
+            Ref: 'hw2-security-group'
         - Key: project
           Value: hw2
 
-  HW2PhotosBucket:
+  PhotosBucket:
     Type: AWS::S3::Bucket
     DependsOn: HW2TriggerIndexPhotosLambdaPermission
     Properties:
@@ -125,7 +120,7 @@ Resources:
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: s3:ObjectCreated:*
-            Function: !GetAtt HW2IndexPhotosLambda.Arn
+            Function: !GetAtt IndexPhotosLambda.Arn
             Filter:
               S3Key:
                 Rules:
@@ -136,12 +131,12 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: 'lambda:InvokeFunction'
-      FunctionName: !GetAtt HW2IndexPhotosLambda.Arn
+      FunctionName: !GetAtt IndexPhotosLambda.Arn
       Principal: s3.amazonaws.com
       SourceArn: !Sub 'arn:aws:s3:::hw2-1323-photos'
       SourceAccount: !Ref AWS::AccountId
 
-  HW2LambdaExecutionRole:
+  LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: hw2-lambda-function-execution-role
@@ -165,13 +160,13 @@ Resources:
             Action: "*"
             Resource: "*"
 
-  HW2IndexPhotosLambda:
+  IndexPhotosLambda:
     Type: AWS::Lambda::Function
     Properties:
       Description: Uses AWS Rekognition to scan photos uploaded to S3 bucket
       FunctionName: hw2-index-photos-function
       Runtime: python3.8
-      Role: !GetAtt HW2LambdaExecutionRole.Arn
+      Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         ZipFile: |
           import json
@@ -184,13 +179,13 @@ Resources:
       MemorySize: 256
       Timeout: 10
 
-  HW2SearchPhotosLambda:
+  SearchPhotosLambda:
     Type: AWS::Lambda::Function
     Properties:
       Description: Search for photos in Open Search domain
       FunctionName: hw2-search-photos-function
       Runtime: python3.8
-      Role: !GetAtt HW2LambdaExecutionRole.Arn
+      Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         ZipFile: |
           import json
@@ -203,7 +198,7 @@ Resources:
       MemorySize: 256
       Timeout: 10
 
-  HW2RestAPI:
+  RestAPI:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Name: hw2-api-gateway
@@ -220,21 +215,21 @@ Resources:
         - Key: account
           Value: 1323
 
-  HW2RestAPISearchResource:
+  RestAPISearchResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt HW2RestAPI.RootResourceId
+      ParentId: !GetAtt RestAPI.RootResourceId
       PathPart: 'search'
-      RestApiId: !Ref HW2RestAPI
+      RestApiId: !Ref RestAPI
 
-  HW2RestAPISearchGETMethod:
+  RestAPISearchGETMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       ApiKeyRequired: false
       AuthorizationType: NONE
       HttpMethod: GET
-      ResourceId: !Ref HW2RestAPISearchResource
-      RestApiId: !Ref HW2RestAPI
+      ResourceId: !Ref RestAPISearchResource
+      RestApiId: !Ref RestAPI
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS
@@ -247,42 +242,42 @@ Resources:
                 - ':'
                 - !Ref AWS::AccountId
                 - ':function:hw2-search-photos-function'
-        Credentials: !GetAtt HW2RestAPIIamRole.Arn
+        Credentials: !GetAtt RestAPIIamRole.Arn
         IntegrationResponses:
           - SelectionPattern: ''
             StatusCode: 200
       MethodResponses:
         - StatusCode: 200
 
-  HW2RestAPIPhotosResource:
+  RestAPIPhotosResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt HW2RestAPI.RootResourceId
+      ParentId: !GetAtt RestAPI.RootResourceId
       PathPart: 'photos'
-      RestApiId: !Ref HW2RestAPI
+      RestApiId: !Ref RestAPI
 
-  HW2RestAPIFolderResource:
+  RestAPIFolderResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !Ref HW2RestAPIPhotosResource
+      ParentId: !Ref RestAPIPhotosResource
       PathPart: '{folder}'
-      RestApiId: !Ref HW2RestAPI
+      RestApiId: !Ref RestAPI
 
-  HW2RestAPIObjectResource:
+  RestAPIObjectResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !Ref HW2RestAPIFolderResource
+      ParentId: !Ref RestAPIFolderResource
       PathPart: '{object}'
-      RestApiId: !Ref HW2RestAPI
+      RestApiId: !Ref RestAPI
 
-  HW2RestAPIPhotosPUTMethod:
+  RestAPIPhotosPUTMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       ApiKeyRequired: false
       AuthorizationType: NONE
       HttpMethod: PUT
-      ResourceId: !Ref HW2RestAPIObjectResource
-      RestApiId: !Ref HW2RestAPI
+      ResourceId: !Ref RestAPIObjectResource
+      RestApiId: !Ref RestAPI
       RequestParameters:
         method.request.path.folder: true
         method.request.path.object: true
@@ -294,7 +289,7 @@ Resources:
           integration.request.path.key: method.request.path.object
         Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:s3:path/{bucket}/{key}'
         ConnectionType: INTERNET
-        Credentials: !GetAtt HW2RestAPIIamRole.Arn
+        Credentials: !GetAtt RestAPIIamRole.Arn
         PassthroughBehavior: WHEN_NO_MATCH
         TimeoutInMillis: 29000
         IntegrationResponses:
@@ -312,13 +307,13 @@ Resources:
         - StatusCode: 400
         - StatusCode: 500
 
-  HW2RestAPIStage:
+  RestAPIStage:
     Type: AWS::ApiGateway::Stage
     Properties:
       StageName: v1
-      Description: HW2 API Stage v0
-      DeploymentId: !Ref HW2RestAPIDeployment
-      RestApiId: !Ref HW2RestAPI
+      Description: HW2 API Stage Resource
+      DeploymentId: !Ref RestAPIDeployment
+      RestApiId: !Ref RestAPI
       MethodSettings:
         - ResourcePath: '/*'
           HttpMethod: '*'
@@ -326,14 +321,14 @@ Resources:
           DataTraceEnabled: true
           MetricsEnabled: false
 
-  HW2RestAPIDeployment:
+  RestAPIDeployment:
     Type: AWS::ApiGateway::Deployment
-    DependsOn: HW2RestAPIPhotosPUTMethod
+    DependsOn: RestAPIPhotosPUTMethod
     Properties:
-      Description: HW2 API Deployment
-      RestApiId: !Ref HW2RestAPI
+      Description: HW2 API Deployment Resource
+      RestApiId: !Ref RestAPI
 
-  HW2RestAPIIamRole:
+  RestAPIIamRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: hw2-api-gateway-role
@@ -360,9 +355,9 @@ Resources:
               Action: s3:PutObject
               Resource: arn:aws:s3:::hw2-1323-photos/*
 
-  HW2RestAPIIamPolicy:
+  RestAPIIamPolicy:
     Type: 'AWS::IAM::Policy'
-    DependsOn: HW2RestAPIIamRole
+    DependsOn: RestAPIIamRole
     Properties:
       PolicyName: hw2-api-gateway_lambda_policy
       PolicyDocument:
@@ -372,9 +367,9 @@ Resources:
             Action: 'lambda:InvokeFunction'
             Resource: '*'
       Roles:
-        - Ref: HW2RestAPIIamRole
+        - Ref: RestAPIIamRole
 
 Outputs:
-  HW2PhotosBucketARN:
+  PhotosBucketARN:
     Description: 'The ARN for the hw2-1323-photos bucket'
-    Value: !GetAtt HW2PhotosBucket.Arn
+    Value: !GetAtt PhotosBucket.Arn
