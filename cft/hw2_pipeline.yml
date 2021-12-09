@@ -17,6 +17,7 @@ Resources:
       Source:
         Type: GITHUB
         Location: https://github.com/steveviens/deepak-hw2-backend.git
+        BuildSpec: 'buildspecs/lambda_buildspec.yml'
       Triggers:
         BuildType: BUILD
         Webhook: True
@@ -30,11 +31,11 @@ Resources:
     Properties:
       BucketName: 'hw2-1323-repo'
 
-  HW2ClientSDKCodeBuildProject:
+  HW2JavaScriptSDKCodeBuildProject:
     Type: 'AWS::CodeBuild::Project'
     Properties:
-      Name: hw2-client-sdk-build
-      Description: Build and deploy HW2 Client JavaScript SDK
+      Name: hw2-js-sdk-build
+      Description: Build HW2 JavaScript SDK and deploy to S3 bucket
       ServiceRole: !GetAtt HW2CodeBuildServiceRole.Arn
       Artifacts:
         Type: S3
@@ -46,7 +47,8 @@ Resources:
         Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
       Source:
         Type: GITHUB
-        Location: https://github.com/steveviens/deepak-hw2-frontend.git
+        Location: https://github.com/steveviens/deepak-hw2-backend.git
+        BuildSpec: 'buildspecs/js_sdk_buildspec.yml'
       Triggers:
         BuildType: BUILD
         Webhook: True
