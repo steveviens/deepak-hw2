@@ -7,13 +7,20 @@ phases:
     build:
         commands:
             - echo Generating hw2 javascript sdk - started on `date`
-            - aws apigateway get-sdk --rest-api-id d8n5fb21w7 --stage-name v1 --sdk-type javascript hw2-js-sdk.zip
+            - api_id=$(aws apigateway get-rest-apis --query 'items[?name==`hw2-api-gateway`].[id]' --output text)
+            - aws apigateway get-sdk --rest-api-id $api_id --stage-name v1 --sdk-type javascript hw2-js-sdk.zip
     post_build:
         commands:
 artifacts:
     files:
         - hw2-js-sdk.zip
 
-# REFERENCE:
+# REFERENCES:
+#
 #   - Build specification reference for CodeBuild
 #     https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
+#
+#   - AWS API Gateway CLI Command Reference v2
+#     https://awscli.amazonaws.com/v2/documentation/api/latest/reference/apigateway/index.html
+
+
