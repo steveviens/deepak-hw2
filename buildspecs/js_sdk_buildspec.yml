@@ -12,8 +12,8 @@ phases:
     build:
         commands:
             - echo Generating hw2 javascript sdk - started on `date`
-            - aws apigateway get-sdk --rest-api-id api_id --stage-name v1 --sdk-type javascript hw2-js-sdk.zip
-            #- aws apigateway get-sdk --rest-api-id d3kgjj3nx4 --stage-name v1 --sdk-type javascript hw2-js-sdk.zip
+            - aws apigateway get-sdk --rest-api-id d3kgjj3nx4 --stage-name v1 --sdk-type javascript hw2-js-sdk.zip
+            #- aws apigateway get-sdk --rest-api-id api_id --stage-name v1 --sdk-type javascript hw2-js-sdk.zip
     post_build:
         commands:
 artifacts:

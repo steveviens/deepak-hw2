@@ -138,8 +138,9 @@ Resources:
                   - 'apigateway:GET'
                   - 'apigateway:PUT'
                 Resource:
+                  - !Sub 'arn:aws:apigateway:*::/restapis*'
                   - !Sub 'arn:aws:apigateway:*::/restapis/*'
-                  #- !Sub 'arn:aws:apigateway:*::/restapis/??????????'
+                  - !Sub 'arn:aws:apigateway:*::/restapis/??????????'
               - Effect: Allow
                 Action:
                   - 'logs:CreateLogGroup'
