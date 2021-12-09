@@ -2,52 +2,28 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: 'Creates Homework #2 CodeBuild Project'
 Resources:
 
-  HW2LambdaCodeBuildProject:
-    Type: 'AWS::CodeBuild::Project'
-    Properties:
-      Name: hw2-lambda-build
-      Description: Build and deploy HW2 lambda function
-      ServiceRole: !GetAtt HW2CodeBuildServiceRole.Arn
-      Artifacts:
-        Type: NO_ARTIFACTS
-      Environment:
-        Type: LINUX_CONTAINER
-        ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
-      Source:
-        Type: GITHUB
-        Location: https://github.com/steveviens/deepak-hw2-backend.git
-        BuildSpec: 'buildspecs/lambda_buildspec.yml'
-      Triggers:
-        BuildType: BUILD
-        Webhook: True
-        FilterGroups:
-        - - Type: EVENT
-            Pattern: PUSH
-      TimeoutInMinutes: 10
-
-  HW2ArtifactsBucket:
+  ArtifactsBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: 'hw2-1323-artifacts'
 
-  HW2JavaScriptSDKCodeBuildProject:
+  JavaScriptSDKCodeBuildProject:
     Type: 'AWS::CodeBuild::Project'
     Properties:
       Name: hw2-js-sdk-build
-      Description: Build HW2 JavaScript SDK and deploy to S3 bucket
-      ServiceRole: !GetAtt HW2CodeBuildServiceRole.Arn
+      Description: Build JavaScript SDK and deploy to S3 bucket
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Artifacts:
         Type: S3
         Name: '/'
-        Location: !Ref HW2ArtifactsBucket
+        Location: !Ref ArtifactsBucket
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
       Source:
         Type: GITHUB
-        Location: https://github.com/steveviens/deepak-hw2-backend.git
+        Location: https://github.com/steveviens/deepak-hw2.git
         BuildSpec: 'buildspecs/js_sdk_buildspec.yml'
       Triggers:
         BuildType: BUILD
@@ -57,7 +33,31 @@ Resources:
             Pattern: PUSH
       TimeoutInMinutes: 10
 
-  HW2CodeBuildServiceRole:
+  LambdaCodeBuildProject:
+    Type: 'AWS::CodeBuild::Project'
+    Properties:
+      Name: hw2-lambda-build
+      Description: Build and deploy HW2 lambda functions
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+      Source:
+        Type: GITHUB
+        Location: https://github.com/steveviens/deepak-hw2.git
+        BuildSpec: 'buildspecs/lambda_buildspec.yml'
+      Triggers:
+        BuildType: BUILD
+        Webhook: True
+        FilterGroups:
+        - - Type: EVENT
+            Pattern: PUSH
+      TimeoutInMinutes: 10
+
+  CodeBuildServiceRole:
     Type: 'AWS::IAM::Role'
     Properties:
       RoleName: hw2-code-pipeline-service-role

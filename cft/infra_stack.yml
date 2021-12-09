@@ -25,10 +25,6 @@ Parameters:
     Type: String
     Default: 10.0.0.0/24
 
-  SGName:
-    Type: String
-    Default: hw2-security-group
-
 Resources:
 
   OpenSearchServiceDomain:
@@ -63,7 +59,7 @@ Resources:
           Value: hw2
       VPCOptions:
         SubnetIds:
-          - Ref: subnet
+          - Ref: Subnet
         SecurityGroupIds:
           - Ref: SecurityGroup
 
@@ -98,8 +94,7 @@ Resources:
       GroupDescription: 'HW2 Open Search Security Group'
       VpcId:
         Ref: Vpc
-      GroupName:
-        Ref: 'hw2-security-group'
+      GroupName: hw2-security-group
       SecurityGroupIngress:
         - FromPort: 443
           IpProtocol: tcp
@@ -107,14 +102,13 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value:
-            Ref: 'hw2-security-group'
+          Value: hw2-security-group
         - Key: project
           Value: hw2
 
   PhotosBucket:
     Type: AWS::S3::Bucket
-    DependsOn: HW2TriggerIndexPhotosLambdaPermission
+    DependsOn: TriggerIndexPhotosLambdaPermission
     Properties:
       BucketName: 'hw2-1323-photos'
       NotificationConfiguration:
@@ -127,7 +121,7 @@ Resources:
                 - Name: suffix
                   Value: .jpeg
 
-  HW2TriggerIndexPhotosLambdaPermission:
+  TriggerIndexPhotosLambdaPermission:
     Type: AWS::Lambda::Permission
     Properties:
       Action: 'lambda:InvokeFunction'
