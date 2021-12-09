@@ -26,10 +26,10 @@ Resources:
             Pattern: PUSH
       TimeoutInMinutes: 10
 
-  HW2RepoBucket:
+  HW2ArtifactsBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: 'hw2-1323-repo'
+      BucketName: 'hw2-1323-artifacts'
 
   HW2JavaScriptSDKCodeBuildProject:
     Type: 'AWS::CodeBuild::Project'
@@ -40,7 +40,7 @@ Resources:
       Artifacts:
         Type: S3
         Name: '/'
-        Location: !Ref HW2RepoBucket
+        Location: !Ref HW2ArtifactsBucket
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -102,7 +102,7 @@ Resources:
                   - 's3:GetBucketAcl'
                   - 's3:GetBucketLocation'
                 Resource:
-                  - !Sub 'arn:aws:s3:::hw2-1323-repo*'
+                  - !Sub 'arn:aws:s3:::hw2-1323-artifacts*'
               - Effect: Allow
                 Action:
                   - 'logs:CreateLogGroup'

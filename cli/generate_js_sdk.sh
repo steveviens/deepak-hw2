@@ -3,3 +3,7 @@ aws apigateway get-sdk \
             --stage-name v1 \
             --sdk-type javascript \
             ./hw2-js-sdk.zip
+
+# REFERENCES:
+#   AWS API Gateway CLI Command Reference v2
+#   https://awscli.amazonaws.com/v2/documentation/api/latest/reference/apigateway/index.html
