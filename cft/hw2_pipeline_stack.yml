@@ -92,7 +92,6 @@ Resources:
                   - "lambda:PublishVersion"
                   - "lambda:EnableReplication"
                 Resource:
-                  #- !Sub "arn:aws:lambda:::function*"
                   - !Sub "arn:aws:lambda:*:${AWS::AccountId}:function:*"
               - Effect: Allow
                 Action:
@@ -110,17 +109,14 @@ Resources:
                   - 'logs:PutLogEvents'
                 Resource:
                   - !Sub 'arn:aws:logs:*:${AWS::AccountId}:log-group:/aws/codebuild/*'
-                  - !Sub >-
-                    arn:aws:logs:*:${AWS::AccountId}:log-group:/aws/codebuild/*:log-stream:*
+                  - !Sub 'arn:aws:logs:*:${AWS::AccountId}:log-group:/aws/codebuild/*:log-stream:*'
               - Effect: Allow
                 Action:
                   - 'codebuild:BatchGetBuilds'
                   - 'codebuild:StartBuild'
                 Resource:
-                  - !Sub >-
-                    arn:aws:codebuild:*:${AWS::AccountId}:project/hw2-code-build-deploy2stage
-                  - !Sub >-
-                    arn:aws:codebuild:*:${AWS::AccountId}:project/hw2-code-build-deploy2prod
+                  - !Sub 'arn:aws:codebuild:*:${AWS::AccountId}:project/hw2-code-build-deploy2stage'
+                  - !Sub 'arn:aws:codebuild:*:${AWS::AccountId}:project/hw2-code-build-deploy2prod'
               - Effect: Allow
                 Action:
                   - 'iam:GetRole'
@@ -140,8 +136,11 @@ Resources:
               - Effect: Allow
                 Action:
                   - 'apigateway:GET'
+                  - 'apigateway:PUT'
                 Resource:
-                  - !Sub 'arn:aws:apigateway:*::/restapis/d8n5fb21w7/stages/v1*'
+                  - !Sub 'arn:aws:apigateway:*::/restapis/*'
+                  - !Sub 'arn:aws:apigateway:*::/restapis/??????????'
+                  #- !Sub 'arn:aws:apigateway:*::/restapis/d8n5fb21w7/stages/v1*'
               - Effect: Allow
                 Action:
                   - 'logs:CreateLogGroup'
