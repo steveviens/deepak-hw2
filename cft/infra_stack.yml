@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Creates AWS Resources for Homework #2"
+Description: "Creates AWS Resource Stack for Homework #2"
 
 Parameters:
 
@@ -7,11 +7,6 @@ Parameters:
     Type: String
     Description: User-defined OpenSearch domain name
     Default: hw2-opensearch-domain
-
-  EngineVersion:
-    Type: String
-    Description: User-defined OpenSearch version
-    Default: OpenSearch_1.0
 
   InstanceType:
     Type: String
@@ -32,10 +27,9 @@ Resources:
     Properties:
       DomainName:
         Ref: DomainName
-      EngineVersion:
-        Ref: EngineVersion
+      EngineVersion: OpenSearch_1.0
       ClusterConfig:
-        InstanceCount: '2'
+        InstanceCount: '1'
         InstanceType:
           Ref: InstanceType
       EBSOptions:
