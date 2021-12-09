@@ -9,10 +9,15 @@ phases:
             #- aws apigateway get-rest-apis --output text
             #- aws apigateway get-rest-apis --query 'items[?name==`hw2-api-gateway`].[id]' --output text
             - api_id=$(aws apigateway get-rest-apis --query 'items[?name==`hw2-api-gateway`].[id]' --output text)
+            - echo $api_id
+            - echo `api_id`
     build:
         commands:
             - echo Generating hw2 javascript sdk - started on `date`
             #- aws apigateway get-sdk --rest-api-id d3kgjj3nx4 --stage-name v1 --sdk-type javascript hw2-js-sdk.zip
+            - api_id=$(aws apigateway get-rest-apis --query 'items[?name==`hw2-api-gateway`].[id]' --output text)
+            - echo $api_id
+            - echo `api_id`
             - aws apigateway get-sdk --rest-api-id $api_id --stage-name v1 --sdk-type javascript hw2-js-sdk.zip
     post_build:
         commands:
