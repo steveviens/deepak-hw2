@@ -1,7 +1,7 @@
 aws cloudformation create-stack \
             --stack-name 'hw2-infra-stack' \
             --capabilities CAPABILITY_NAMED_IAM \
-            --template-body file://../cft/hw2_infra_stack.yml
+            --template-body file://../cft/infra_stack.yml
 
 # REFERENCES:
 #   AWS CloudFormation CLI Command Reference v2
