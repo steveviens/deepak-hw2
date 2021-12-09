@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'Creates Homework #2 Open Search Domain'
+Parameters:
+  DomainName:
+    Type: String
+    Description: User-defined OpenSearch domain name
+    Default: hw2-opensearch-domain
+  EngineVersion:
+    Type: String
+    Description: User-defined OpenSearch version
+    Default: OpenSearch_1.0
+  InstanceType:
+    Type: String
+    Default: t2.small.search
+  AvailabilityZone:
+    Type: String
+    Default: us-east-1a
+  CidrBlock:
+    Type: String
+    Default: 10.0.0.0/24
+  GroupDescription:
+    Type: String
+    Default: HW2 open search security group
+  SGName:
+    Type: String
+    Default: hw2-security-group
+
+Resources:
+
+  OpenSearchServiceDomain:
+    Type: 'AWS::OpenSearchService::Domain'
+    Properties:
+      DomainName:
+        Ref: DomainName
+      EngineVersion:
+        Ref: EngineVersion
+      ClusterConfig:
+        InstanceCount: '1'
+        InstanceType:
+          Ref: InstanceType
+      EBSOptions:
+        EBSEnabled: true
+        Iops: '0'
+        VolumeSize: '10'
+        VolumeType: 'standard'
+      AccessPolicies:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Deny
+            Principal:
+              AWS: '*'
+            Action: 'es:*'
+            Resource: '*'
+      AdvancedOptions:
+        rest.action.multi.allow_explicit_index: true
+        override_main_response_version: true
+      Tags:
+        - Key: project
+          Value: hw2
+      VPCOptions:
+        SubnetIds:
+          - Ref: subnet
+        SecurityGroupIds:
+          - Ref: securityGroup
+
+  vpc:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/24
+      Tags:
+        - Key: Name
+          Value: hw2-vpc
+        - Key: project
+          Value: hw2
+
+
+  subnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId:
+        Ref: vpc
+      CidrBlock:
+        Ref: CidrBlock
+      AvailabilityZone:
+        Ref: AvailabilityZone
+      Tags:
+        - Key: Name
+          Value: hw2-subnet
+        - Key: project
+          Value: hw2
+
+
+  securityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription:
+        Ref: GroupDescription
+      VpcId:
+        Ref: vpc
+      GroupName:
+        Ref: SGName
+      SecurityGroupIngress:
+        - FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value:
+            Ref: SGName
+        - Key: project
+          Value: hw2
